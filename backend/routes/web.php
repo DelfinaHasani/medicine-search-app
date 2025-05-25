@@ -19,6 +19,8 @@ Route::view('profile', 'profile')
         Route::get('/medicines', [MedicineController::class, 'index'])->name('medicine.index');
         Route::post('/medicines', [MedicineController::class, 'search'])->name('medicine.search');
         Route::get('/saved-medicines', [MedicineController::class, 'saved'])->name('medicines.saved');
+        Route::get('/medicines/export', [MedicineController::class, 'exportCsv'])->name('medicines.export');
+
 
     });
 

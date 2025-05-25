@@ -2,6 +2,14 @@
     <div class="container mx-auto px-4 mt-12 max-w-4xl">
         <h2 class="text-2xl font-bold mb-4">Medikamentet e Ruajtura</h2>
 
+        {{-- Butoni Eksporto--}}
+        <div class="flex justify-end mb-4">
+            <a href="{{ route('medicines.export') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Eksporto CSV
+            </a>
+        </div>
+
+        {{-- Tabela --}}
         <table class="min-w-full bg-white border border-gray-300">
             <thead class="bg-gray-100">
                 <tr>
@@ -25,7 +33,8 @@
             </tbody>
         </table>
 
-        <div class="mt-4 white">
+        {{-- Paginimi --}}
+        <div class="mt-4">
             {{ $medicines->links() }}
         </div>
     </div>

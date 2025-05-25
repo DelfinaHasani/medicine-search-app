@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Response;
 use App\Models\Medicine;
 
 class MedicineController extends Controller
@@ -75,6 +76,22 @@ class MedicineController extends Controller
     $medicines = Medicine::orderBy('created_at', 'desc')->paginate(5);
 
     return view('medicine.saved', compact('medicines'));
+}
+
+public function exportCsv()
+{
+    $medicines = Medicine::all();
+
+    $csvData = "ID,Code,Name,Created At\n";
+
+    foreach ($medicines as $medicine) {
+        $csvData .= "{$medicine->id},{$medicine->code},{$medicine->name},{$medicine->created_at}\n";
+    }
+
+    return Response::make($csvData, 200, [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => 'attachment; filename="medicines.csv"',
+    ]);
 }
 
     
