@@ -2,7 +2,7 @@
     <div class="min-h-screen flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold mb-6 mt-4 text-black">Aplikacioni për Kërkimin e Ilaçeve</h1>
 
-        <form method="POST" action="{{ route('medicine.search') }}" class="w-full max-w-4xl flex gap-4 items-center">
+        <form id="searchForm" method="POST" action="{{ route('medicine.search') }}" class="w-full max-w-4xl flex gap-4 items-center">
             @csrf
             <input
                 type="text"
@@ -26,8 +26,13 @@
             </a>
         </form>
 
+        {{-- Spinner --}}
+        <div id="spinner" class="hidden mt-6">
+            <div class="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
+
         @isset($results)
-            <div class="w-full flex justify-center mt-10 px-4">
+            <div id="resultsContainer" class="w-full flex justify-center mt-10 px-4 transition-opacity duration-300">
                 <div class="max-w-4xl w-full overflow-x-auto">
                     <table class="w-full border border-gray-200 shadow-md rounded-lg overflow-hidden">
                         <thead class="bg-gray-100">
@@ -55,4 +60,18 @@
             </div>
         @endisset
     </div>
+
+    {{-- Spinner JS --}}
+    <script>
+        const form = document.getElementById('searchForm');
+        const spinner = document.getElementById('spinner');
+        const results = document.getElementById('resultsContainer');
+
+        form.addEventListener('submit', function () {
+            spinner.classList.remove('hidden');
+            if (results) {
+                results.classList.add('opacity-50');
+            }
+        });
+    </script>
 </x-app-layout>
