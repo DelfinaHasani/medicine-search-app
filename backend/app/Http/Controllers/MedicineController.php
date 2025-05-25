@@ -17,11 +17,11 @@ class MedicineController extends Controller
     {
         $codes = array_map('trim', explode(',', $request->input('ndc')));
         $results = [];
-
+    
         foreach ($codes as $code) {
-            // Check local DB
+            // Kontrollo DB lokale
             $local = Medicine::where('ndc_code', $code)->first();
-
+    
             if ($local) {
                 $results[] = [
                     'ndc_code' => $local->ndc_code,
@@ -31,13 +31,24 @@ class MedicineController extends Controller
                     'source' => 'Database',
                 ];
             } else {
-                // Try OpenFDA API
+                // Kërko në OpenFDA API
                 $response = Http::get("https://api.fda.gov/drug/ndc.json", [
                     'search' => "product_ndc:$code",
                 ]);
-
+    
                 if ($response->ok() && isset($response['results'][0])) {
                     $data = $response['results'][0];
+    
+                    // Ruaj në DB
+                    Medicine::updateOrCreate(
+                        ['ndc_code' => $code],
+                        [
+                            'brand_name' => $data['brand_name'] ?? '-',
+                            'labeler_name' => $data['labeler_name'] ?? '-',
+                            'product_type' => $data['product_type'] ?? '-',
+                        ]
+                    );
+    
                     $results[] = [
                         'ndc_code' => $code,
                         'brand_name' => $data['brand_name'] ?? '-',
@@ -56,7 +67,15 @@ class MedicineController extends Controller
                 }
             }
         }
-
+    
         return view('medicine.index', ['results' => $results]);
     }
+    public function saved()
+{
+    $medicines = Medicine::orderBy('created_at', 'desc')->paginate(5);
+
+    return view('medicine.saved', compact('medicines'));
+}
+
+    
 }

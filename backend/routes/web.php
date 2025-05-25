@@ -18,6 +18,10 @@ Route::view('profile', 'profile')
     Route::middleware(['auth'])->group(function () {
         Route::get('/medicines', [MedicineController::class, 'index'])->name('medicine.index');
         Route::post('/medicines', [MedicineController::class, 'search'])->name('medicine.search');
+        Route::get('/saved-medicines', [MedicineController::class, 'saved'])->name('medicines.saved');
+
     });
+
+
     
 require __DIR__.'/auth.php';
