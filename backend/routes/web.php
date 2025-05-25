@@ -20,6 +20,7 @@ Route::view('profile', 'profile')
         Route::post('/medicines', [MedicineController::class, 'search'])->name('medicine.search');
         Route::get('/saved-medicines', [MedicineController::class, 'saved'])->name('medicines.saved');
         Route::get('/medicines/export', [MedicineController::class, 'exportCsv'])->name('medicines.export');
+        Route::delete('/medicines/{id}', [MedicineController::class, 'destroy'])->name('medicines.destroy');
 
 
     });

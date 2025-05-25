@@ -93,6 +93,14 @@ public function exportCsv()
         'Content-Disposition' => 'attachment; filename="medicines.csv"',
     ]);
 }
+        public function destroy($id)
+        {
+            $medicine = Medicine::findOrFail($id);
+            $medicine->delete();
+
+            return redirect()->route('medicines.saved')->with('success', 'Medikamenti u fshi me sukses.');
+        }
+
 
     
 }
